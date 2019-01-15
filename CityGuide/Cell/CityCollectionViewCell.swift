@@ -17,10 +17,15 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
     @IBOutlet weak var cityImage: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    func configure(with city: City) {
+    private var collectionView: UICollectionView?
+    
+    func configure(with city: City, collectionView: UICollectionView) {
         cityTitle.text = city.name
         cityImage.image = UIImage(named: city.image)
         descriptionLabel.text = city.description
+        
+        self.collectionView = collectionView
     }
+    
     
 }
