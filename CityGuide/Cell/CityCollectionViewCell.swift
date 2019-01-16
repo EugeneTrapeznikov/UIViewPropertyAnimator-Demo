@@ -44,6 +44,19 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
         return UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut)
     }()
     
+    private let popupOffset: CGFloat = (UIScreen.main.bounds.height - cellSize.height)/2.0
+    private var animationProgress: CGFloat = 0
+    
+    private lazy var panRecognizer: UIPanGestureRecognizer = {
+        let recognizer = UIPanGestureRecognizer()
+        recognizer.addTarget(self, action: #selector(popupViewPanned(recognizer:)))
+        return recognizer
+    }()
+    
+    override func awakeFromNib() {
+        self.addGestureRecognizer(panRecognizer)
+    }
+    
     func configure(with city: City, collectionView: UICollectionView, index: Int) {
         cityTitle.text = city.name
         cityImage.image = UIImage(named: city.image)
@@ -126,5 +139,26 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
         }
         
         animator.startAnimation()
+    }
+    
+    @objc func popupViewPanned(recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            toggle()
+            animator.pauseAnimation()
+            animationProgress = animator.fractionComplete
+            
+        case .changed:
+            let translation = recognizer.translation(in: collectionView)
+            var fraction = -translation.y / popupOffset
+            if state == .expanded { fraction *= -1 }
+            animator.fractionComplete = fraction + animationProgress
+            
+        case .ended:
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+            
+        default:
+            ()
+        }
     }
 }
