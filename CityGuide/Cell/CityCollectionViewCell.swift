@@ -10,6 +10,8 @@ import UIKit
 
 class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
+    private let cornerRadius: CGFloat = 6
+    
     static let cellSize = CGSize(width: 250, height: 350)
     static let identifier = "CityCollectionViewCell"
     
