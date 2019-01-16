@@ -31,9 +31,7 @@ extension ViewController {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CityCollectionViewCell.identifier, for: indexPath) as! CityCollectionViewCell
-        cell.configure(with: items[indexPath.item], collectionView: collectionView)
-        
+        cell.configure(with: items[indexPath.item], collectionView: collectionView, index: indexPath.row)
         return cell
     }
 }
-

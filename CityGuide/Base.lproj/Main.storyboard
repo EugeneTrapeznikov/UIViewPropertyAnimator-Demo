@@ -62,9 +62,22 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" alpha="0.0" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TJG-Np-Jsq">
+                                                    <rect key="frame" x="210" y="0.0" width="40" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="kfN-MS-aGU"/>
+                                                        <constraint firstAttribute="height" constant="40" id="tJj-OA-WJo"/>
+                                                    </constraints>
+                                                    <state key="normal" image="close"/>
+                                                    <connections>
+                                                        <action selector="close:" destination="QQF-6V-gFY" eventType="touchUpInside" id="SD8-Qo-0F4"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="TJG-Np-Jsq" secondAttribute="trailing" id="6Y6-i3-xgl"/>
+                                            <constraint firstItem="TJG-Np-Jsq" firstAttribute="top" secondItem="QQF-6V-gFY" secondAttribute="top" id="CBl-hj-wMi"/>
                                             <constraint firstItem="Ljh-uT-DNs" firstAttribute="leading" secondItem="QQF-6V-gFY" secondAttribute="leading" id="Fdj-yu-70e"/>
                                             <constraint firstItem="Amq-4O-B2V" firstAttribute="centerX" secondItem="Ljh-uT-DNs" secondAttribute="centerX" id="Uyt-y2-uSs"/>
                                             <constraint firstItem="Ljh-uT-DNs" firstAttribute="top" secondItem="QQF-6V-gFY" secondAttribute="top" id="ZxI-b0-ruu"/>
@@ -81,6 +94,7 @@
                                         <connections>
                                             <outlet property="cityImage" destination="Ljh-uT-DNs" id="52M-G5-ZCv"/>
                                             <outlet property="cityTitle" destination="Amq-4O-B2V" id="nqU-iz-iKn"/>
+                                            <outlet property="closeButton" destination="TJG-Np-Jsq" id="PRe-ac-UAc"/>
                                             <outlet property="descriptionLabel" destination="Jp7-MW-e2K" id="kML-av-8QH"/>
                                         </connections>
                                     </collectionViewCell>
@@ -115,6 +129,7 @@
     </scenes>
     <resources>
         <image name="background" width="1920" height="1080"/>
+        <image name="close" width="40" height="40"/>
         <image name="newyork" width="1200" height="675"/>
     </resources>
 </document>

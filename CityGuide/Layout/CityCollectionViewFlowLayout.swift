@@ -28,6 +28,10 @@ class CityCollectionViewFlowLayout: UICollectionViewFlowLayout {
         scrollDirection = .horizontal
     }
     
+    func setItemSize(itemSize: CGSize) {
+        self.itemSize = itemSize
+    }
+    
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         super.invalidateLayout(with: context)
         
@@ -115,7 +119,7 @@ class CityCollectionViewFlowLayout: UICollectionViewFlowLayout {
         return newAttributesArray
     }
     
-    fileprivate func configureContentInset() {
+    func configureContentInset() {
         guard let collectionView = self.collectionView else {
             return
         }
@@ -123,5 +127,13 @@ class CityCollectionViewFlowLayout: UICollectionViewFlowLayout {
         let inset = collectionView.bounds.size.width / 2 - itemSize.width / 2
         collectionView.contentInset = UIEdgeInsets.init(top: 0, left: inset, bottom: 0, right: inset)
         collectionView.contentOffset = CGPoint(x: -inset, y: 0)
+    }
+    
+    func resetContentInset() {
+        guard let collectionView = self.collectionView else {
+            return
+        }
+        
+        collectionView.contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
