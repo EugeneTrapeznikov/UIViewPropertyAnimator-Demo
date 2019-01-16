@@ -8,6 +8,18 @@
 
 import UIKit
 
+private enum State {
+    case expanded
+    case collapsed
+    
+    var change: State {
+        switch self {
+        case .expanded: return .collapsed
+        case .collapsed: return .expanded
+        }
+    }
+}
+
 class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     private let cornerRadius: CGFloat = 6
@@ -23,6 +35,15 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
     private var collectionView: UICollectionView?
     private var index: Int?
     
+    
+    private var initialFrame: CGRect?
+    
+    private var state: State = .collapsed
+    
+    private lazy var animator: UIViewPropertyAnimator = {
+        return UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut)
+    }()
+    
     func configure(with city: City, collectionView: UICollectionView, index: Int) {
         cityTitle.text = city.name
         cityImage.image = UIImage(named: city.image)
@@ -33,5 +54,77 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
     }
     
     @IBAction func close(_ sender: Any) {
+        toggle()
+    }
+    
+    func toggle() {
+        switch state {
+        case .expanded:
+            collapse()
+        case .collapsed:
+            expand()
+        }
+    }
+    
+    private func expand() {
+        guard let collectionView = self.collectionView, let index = self.index else { return }
+        
+        animator.addAnimations {
+            self.initialFrame = self.frame
+            
+            self.descriptionLabel.alpha = 1
+            self.closeButton.alpha = 1
+            
+            self.layer.cornerRadius = 0
+            self.frame = CGRect(x: collectionView.contentOffset.x, y:0 , width: collectionView.frame.width, height: collectionView.frame.height)
+            
+            if let leftCell = collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) {
+                leftCell.center.x -= 50
+            }
+            
+            if let rightCell = collectionView.cellForItem(at: IndexPath(row: index + 1, section: 0)) {
+                rightCell.center.x += 50
+            }
+            
+            self.layoutIfNeeded()
+        }
+        
+        animator.addCompletion { _ in
+            collectionView.isScrollEnabled = false
+            collectionView.allowsSelection = false
+            self.state = self.state.change
+        }
+        
+        animator.startAnimation()
+    }
+    
+    private func collapse() {
+        guard let collectionView = self.collectionView, let index = self.index else { return }
+        
+        animator.addAnimations {
+            self.descriptionLabel.alpha = 0
+            self.closeButton.alpha = 0
+            
+            self.layer.cornerRadius = self.cornerRadius
+            self.frame = self.initialFrame!
+            
+            if let leftCell = collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) {
+                leftCell.center.x += 50
+            }
+            
+            if let rightCell = collectionView.cellForItem(at: IndexPath(row: index + 1, section: 0)) {
+                rightCell.center.x -= 50
+            }
+            
+            self.layoutIfNeeded()
+        }
+        
+        animator.addCompletion { _ in
+            collectionView.isScrollEnabled = true
+            collectionView.allowsSelection = true
+            self.state = self.state.change
+        }
+        
+        animator.startAnimation()
     }
 }

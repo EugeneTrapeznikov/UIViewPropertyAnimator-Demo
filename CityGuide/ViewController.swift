@@ -35,3 +35,13 @@ extension ViewController {
         return cell
     }
 }
+
+// MARK: UICollectionViewDelegate
+
+extension ViewController  {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCell = collectionView.cellForItem(at: indexPath)! as! CityCollectionViewCell
+        selectedCell.toggle()
+    }
+}
