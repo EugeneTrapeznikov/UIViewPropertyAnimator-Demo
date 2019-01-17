@@ -164,9 +164,24 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
             let translation = recognizer.translation(in: collectionView)
             var fraction = -translation.y / popupOffset
             if state == .expanded { fraction *= -1 }
+            if animator.isReversed { fraction *= -1 }
             animator.fractionComplete = fraction + animationProgress
             
         case .ended:
+            let velocity = recognizer.velocity(in: self)
+            let shouldComplete = velocity.y > 0
+            if velocity.y == 0 {
+                animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+                break
+            }
+            switch state {
+            case .expanded:
+                if !shouldComplete && !animator.isReversed { animator.isReversed = !animator.isReversed }
+                if shouldComplete && animator.isReversed { animator.isReversed = !animator.isReversed }
+            case .collapsed:
+                if shouldComplete && !animator.isReversed { animator.isReversed = !animator.isReversed }
+                if !shouldComplete && animator.isReversed { animator.isReversed = !animator.isReversed }
+            }
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
             
         default:
