@@ -102,10 +102,15 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
             self.layoutIfNeeded()
         }
         
-        animator.addCompletion { _ in
+        animator.addCompletion { position in
+            switch position {
+            case .end:
+                self.state = self.state.change
+            default:
+                ()
+            }
             collectionView.isScrollEnabled = false
             collectionView.allowsSelection = false
-            self.state = self.state.change
         }
         
         animator.startAnimation()
@@ -132,10 +137,17 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
             self.layoutIfNeeded()
         }
         
-        animator.addCompletion { _ in
+        animator.addCompletion { position in
+            switch position {
+            case .end:
+                self.state = self.state.change
+            default:
+                ()
+            }
+            
             collectionView.isScrollEnabled = true
             collectionView.allowsSelection = true
-            self.state = self.state.change
+            
         }
         
         animator.startAnimation()
