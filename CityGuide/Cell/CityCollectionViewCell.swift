@@ -50,6 +50,7 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
     private lazy var panRecognizer: UIPanGestureRecognizer = {
         let recognizer = UIPanGestureRecognizer()
         recognizer.addTarget(self, action: #selector(popupViewPanned(recognizer:)))
+        recognizer.delegate = self
         return recognizer
     }()
     
@@ -106,11 +107,11 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
             switch position {
             case .end:
                 self.state = self.state.change
+                collectionView.isScrollEnabled = false
+                collectionView.allowsSelection = false
             default:
                 ()
             }
-            collectionView.isScrollEnabled = false
-            collectionView.allowsSelection = false
         }
         
         animator.startAnimation()
@@ -141,13 +142,11 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
             switch position {
             case .end:
                 self.state = self.state.change
+                collectionView.isScrollEnabled = true
+                collectionView.allowsSelection = true
             default:
                 ()
             }
-            
-            collectionView.isScrollEnabled = true
-            collectionView.allowsSelection = true
-            
         }
         
         animator.startAnimation()
@@ -187,5 +186,13 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
         default:
             ()
         }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return abs((panRecognizer.velocity(in: panRecognizer.view)).y) > abs((panRecognizer.velocity(in: panRecognizer.view)).x)
     }
 }
