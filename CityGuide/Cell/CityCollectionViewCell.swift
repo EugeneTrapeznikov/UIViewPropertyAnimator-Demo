@@ -35,7 +35,6 @@ class CityCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate 
     private var collectionView: UICollectionView?
     private var index: Int?
     
-    
     private var initialFrame: CGRect?
     
     private var state: State = .collapsed
